@@ -36,7 +36,7 @@ export class FilmsController {
     if (!film) {
       throw new NotFoundException(`Фильм с ID ${id} не найден`);
     }
-    const schedule = film.schedule || [];
+    const schedule = film.schedules || [];
     return {
       total: schedule.length,
       items: schedule,

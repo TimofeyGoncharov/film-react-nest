@@ -1,26 +1,36 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Film, SchemaFactory } from './films.schema';
 
-@Schema()
+@Entity('schedules')
 export class Schedule {
-  @Prop({ required: true })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Prop({ required: true })
+  @Column()
   daytime: string;
 
-  @Prop({ required: true })
+  @Column()
   hall: number;
 
-  @Prop({ required: true })
+  @Column()
   rows: number;
 
-  @Prop({ required: true })
+  @Column()
   seats: number;
 
-  @Prop({ required: true })
+  @Column()
   price: number;
 
-  @Prop({ type: [String], default: [] })
+  @Column('simple-array', { default: '' })
   taken: string[];
+
+  @ManyToOne(() => Film, (film) => film.schedules, {
+    cascade: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  film: Film;
 }
-export const ScheduleSchema = SchemaFactory.createForClass(Schedule);
+
+export type ScheduleDocument = Schedule;
+export const ScheduleSchema = SchemaFactory(Schedule);

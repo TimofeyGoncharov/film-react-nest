@@ -3,32 +3,33 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Film, FilmDocument } from '../../films/dto/films.schema';
-import { CreateOrder } from './order.schema';
+import { CreateOrder, ResultOrder } from './order.schema';
 
 @Injectable()
 export class OrderService {
-  constructor(@InjectModel(Film.name) private filmModel: Model<FilmDocument>) {}
+  constructor(
+    @InjectRepository(Film)
+    private filmModel: Repository<FilmDocument>,
+  ) {}
 
   async bookSeats(
     filmId: string,
     sessionId: string,
     seats: string[],
   ): Promise<void> {
-    const film = await this.filmModel
-      .findOne({
-        id: filmId,
-        'schedule.id': sessionId,
-      })
-      .exec();
+    const film = await this.filmModel.findOne({
+      where: { id: filmId },
+      relations: ['schedules'],
+    });
 
     if (!film) {
-      throw new NotFoundException('Фильм или расписание не найдены');
+      throw new NotFoundException('Фильм не найдены');
     }
 
-    const schedule = film.schedule.find((s) => s.id === sessionId);
+    const schedule = film.schedules.find((s) => s.id === sessionId);
 
     if (!schedule) {
       throw new NotFoundException('Сеанс не найден');
@@ -45,21 +46,18 @@ export class OrderService {
 
     schedule.taken = Array.from(occupiedSeats);
 
-    await this.filmModel.updateOne(
-      { id: filmId, 'schedule.id': sessionId },
-      { $set: { 'schedule.$.taken': schedule.taken } },
-    );
+    await this.filmModel.save(schedule);
   }
 
-  async processOrder(order: CreateOrder): Promise<any[]> {
-    const results = [];
+  async processOrder(order: CreateOrder): Promise<ResultOrder[]> {
+    const result: ResultOrder[] = [];
 
     for (const ticket of order.tickets) {
       await this.bookSeats(ticket.film, ticket.session, [
         `${ticket.row}-${ticket.seat}`,
       ]);
 
-      results.push({
+      result.push({
         film: ticket.film,
         session: ticket.session,
         row: ticket.row,
@@ -69,6 +67,6 @@ export class OrderService {
       });
     }
 
-    return results;
+    return result;
   }
 }
