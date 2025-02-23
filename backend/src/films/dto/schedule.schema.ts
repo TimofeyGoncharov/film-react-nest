@@ -29,4 +29,3 @@ export class Schedule {
 }
 
 export type ScheduleDocument = Schedule;
-// export const ScheduleSchema = SchemaFactory(Schedule);
