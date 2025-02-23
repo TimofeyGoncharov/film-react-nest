@@ -1,15 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { EntitySchema } from 'typeorm';
 import { Schedule } from './schedule.schema';
-
-export function SchemaFactory<T>(classRef: new () => T): EntitySchema<T> {
-  return new EntitySchema<T>({
-    name: classRef.name,
-    target: classRef,
-    columns: Reflect.getMetadata('columns', classRef) || {},
-    relations: Reflect.getMetadata('relations', classRef) || {},
-  });
-}
 
 export type FilmDocument = Film & Document;
 
@@ -42,12 +32,6 @@ export class Film {
   @Column()
   description: string;
 
-  @OneToMany(() => Schedule, (schedule) => schedule.film, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  @OneToMany(() => Schedule, (schedule) => schedule.film)
   schedules: Schedule[];
 }
-
-export const FilmSchema = SchemaFactory(Film);

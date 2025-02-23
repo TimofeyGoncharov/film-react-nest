@@ -7,12 +7,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Film, FilmDocument } from '../../films/dto/films.schema';
 import { CreateOrder, ResultOrder } from './order.schema';
+import { Schedule } from 'src/films/dto/schedule.schema';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(Film)
     private filmModel: Repository<FilmDocument>,
+    @InjectRepository(Schedule)
+    private readonly scheduleRepository: Repository<Schedule>,
   ) {}
 
   async bookSeats(
@@ -46,7 +49,7 @@ export class OrderService {
 
     schedule.taken = Array.from(occupiedSeats);
 
-    await this.filmModel.save(schedule);
+    await this.scheduleRepository.save(schedule);
   }
 
   async processOrder(order: CreateOrder): Promise<ResultOrder[]> {

@@ -13,7 +13,7 @@ import { OrderModule } from './order/dto/order.module';
       cache: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'public', 'content', 'afisha'),
+      rootPath: path.join(__dirname, '..', '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha/',
     }),
     DatabaseModule,

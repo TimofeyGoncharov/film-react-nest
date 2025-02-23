@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Film, SchemaFactory } from './films.schema';
+import { Film } from './films.schema';
 
 @Entity('schedules')
 export class Schedule {
@@ -24,13 +24,9 @@ export class Schedule {
   @Column('simple-array', { default: '' })
   taken: string[];
 
-  @ManyToOne(() => Film, (film) => film.schedules, {
-    cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => Film, (film) => film.schedules)
   film: Film;
 }
 
 export type ScheduleDocument = Schedule;
-export const ScheduleSchema = SchemaFactory(Schedule);
+// export const ScheduleSchema = SchemaFactory(Schedule);
