@@ -22,3 +22,12 @@ export class CreateOrder {
   @Type(() => Ticket)
   tickets: Ticket[];
 }
+
+export class ResultOrder {
+  film: string;
+  session: string;
+  row: number;
+  seat: number;
+  price: number;
+  daytime: string;
+}

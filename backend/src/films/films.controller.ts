@@ -6,9 +6,9 @@ import {
   Body,
   NotFoundException,
 } from '@nestjs/common';
-import { FilmsService } from './films.service';
-import { Film } from './films.schema';
-import { Schedule } from './schedule.schema';
+import { FilmsService } from '../repository/films.service';
+import { Film } from './dto/films.schema';
+import { Schedule } from './dto/schedule.schema';
 
 @Controller('/films')
 export class FilmsController {
@@ -36,7 +36,7 @@ export class FilmsController {
     if (!film) {
       throw new NotFoundException(`Фильм с ID ${id} не найден`);
     }
-    const schedule = film.schedule || [];
+    const schedule = film.schedules || [];
     return {
       total: schedule.length,
       items: schedule,
