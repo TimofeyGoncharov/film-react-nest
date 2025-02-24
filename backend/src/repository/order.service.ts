@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Film, FilmDocument } from '../../films/dto/films.schema';
-import { CreateOrder, ResultOrder } from './order.schema';
+import { Film, FilmDocument } from '../films/dto/films.schema';
+import { CreateOrder, ResultOrder } from '../order/dto/order.schema';
 import { Schedule } from 'src/films/dto/schedule.schema';
 
 @Injectable()

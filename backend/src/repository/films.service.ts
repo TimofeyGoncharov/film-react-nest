@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Film, FilmDocument } from './films.schema';
+import { Film, FilmDocument } from '../films/dto/films.schema';
 
 @Injectable()
 export class FilmsService {

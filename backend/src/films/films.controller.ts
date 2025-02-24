@@ -6,9 +6,9 @@ import {
   Body,
   NotFoundException,
 } from '@nestjs/common';
-import { FilmsService } from './films.service';
-import { Film } from './films.schema';
-import { Schedule } from './schedule.schema';
+import { FilmsService } from '../repository/films.service';
+import { Film } from './dto/films.schema';
+import { Schedule } from './dto/schedule.schema';
 
 @Controller('/films')
 export class FilmsController {

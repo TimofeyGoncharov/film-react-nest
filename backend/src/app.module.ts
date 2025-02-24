@@ -3,8 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'node:path';
 import { DatabaseModule } from './database.module';
-import { FilmsModule } from './films/dto/films.module';
-import { OrderModule } from './order/dto/order.module';
+import { FilmsModule } from './films/films.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { OrderModule } from './order/dto/order.module';
       cache: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', '..', 'public', 'content', 'afisha'),
+      rootPath: path.join(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha/',
     }),
     DatabaseModule,
