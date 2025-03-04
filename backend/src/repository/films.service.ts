@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Film, FilmDocument } from '../films/dto/films.schema';
+import { CreateFilm, Film, FilmDocument } from '../films/dto/films.schema';
 
 @Injectable()
 export class FilmsService {
@@ -29,8 +29,8 @@ export class FilmsService {
     return film;
   }
 
-  async create(film: Film): Promise<Film> {
-    const newFilm = this.filmDocument.create(film);
-    return await this.filmDocument.save(newFilm);
+  async create(film: Film | CreateFilm): Promise<Film> {
+    const filmData: Film = film as Film;
+    return await this.filmDocument.create(filmData);
   }
 }

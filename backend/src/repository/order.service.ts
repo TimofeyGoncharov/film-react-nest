@@ -6,8 +6,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Film, FilmDocument } from '../films/dto/films.schema';
-import { CreateOrder, ResultOrder } from '../order/dto/order.schema';
-import { Schedule } from 'src/films/dto/schedule.schema';
+import { CreateOrder } from '../order/dto/order.schema';
+import { Schedule } from '../films/dto/schedule.schema';
+import { Ticket } from 'src/order/dto/ticket.schema';
 
 @Injectable()
 export class OrderService {
@@ -52,24 +53,14 @@ export class OrderService {
     await this.scheduleRepository.save(schedule);
   }
 
-  async processOrder(order: CreateOrder): Promise<ResultOrder[]> {
-    const result: ResultOrder[] = [];
-
+  async processOrder(
+    order: CreateOrder,
+  ): Promise<{ items: Ticket[]; total: number }> {
     for (const ticket of order.tickets) {
       await this.bookSeats(ticket.film, ticket.session, [
         `${ticket.row}-${ticket.seat}`,
       ]);
-
-      result.push({
-        film: ticket.film,
-        session: ticket.session,
-        row: ticket.row,
-        seat: ticket.seat,
-        price: ticket.price,
-        daytime: new Date().toISOString(),
-      });
     }
-
-    return result;
+    return { items: order.tickets, total: order.tickets.length };
   }
 }

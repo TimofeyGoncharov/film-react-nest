@@ -8,11 +8,6 @@ export class OrderController {
 
   @Post()
   async create(@Body() createOrder: CreateOrder) {
-    const items = await this.orderService.processOrder(createOrder);
-
-    return {
-      total: items.length,
-      items,
-    };
+    return await this.orderService.processOrder(createOrder);
   }
 }

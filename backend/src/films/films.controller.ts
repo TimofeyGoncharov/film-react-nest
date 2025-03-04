@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { FilmsService } from '../repository/films.service';
-import { Film } from './dto/films.schema';
+import { CreateFilm, Film } from './dto/films.schema';
 import { Schedule } from './dto/schedule.schema';
 
 @Controller('/films')
@@ -44,7 +44,7 @@ export class FilmsController {
   }
 
   @Post()
-  async create(@Body() film: Film): Promise<Film> {
+  async create(@Body() film: Film | CreateFilm): Promise<Film> {
     return this.filmsService.create(film);
   }
 }

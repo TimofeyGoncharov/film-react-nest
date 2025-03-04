@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Schedule } from './schedule.schema';
+import { GetSchedule, Schedule } from './schedule.schema';
+import { IsFQDN, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export type FilmDocument = Film & Document;
 
@@ -34,4 +35,36 @@ export class Film {
 
   @OneToMany(() => Schedule, (schedule) => schedule.film)
   schedules: Schedule[];
+}
+
+export class GetFilm {
+  id: string;
+  rating: number;
+  director: string;
+  tags: string;
+  image: string;
+  cover: string;
+  title: string;
+  about: string;
+  description: string;
+  schedules: GetSchedule[];
+}
+export class CreateFilm {
+  @IsNumber()
+  rating: number;
+  @IsString()
+  director: string;
+  tags: string;
+  @IsFQDN()
+  image: string;
+  @IsFQDN()
+  cover: string;
+  @IsString()
+  title: string;
+  @IsString()
+  about: string;
+  @IsString()
+  description: string;
+  @IsNotEmpty()
+  schedules: GetSchedule[];
 }

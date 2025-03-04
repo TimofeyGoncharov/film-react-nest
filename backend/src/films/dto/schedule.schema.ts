@@ -29,3 +29,13 @@ export class Schedule {
 }
 
 export type ScheduleDocument = Schedule;
+
+export class GetSchedule {
+  id: string;
+  daytime: string;
+  hall: number;
+  rows: number;
+  seats: number;
+  price: number;
+  taken: string[];
+}

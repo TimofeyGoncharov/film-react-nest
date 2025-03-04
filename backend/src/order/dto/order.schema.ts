@@ -4,9 +4,10 @@ import {
   ValidateNested,
   IsEmail,
   IsPhoneNumber,
+  IsMobilePhone,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Ticket } from './ticket.schema';
+import { GetTicket, Ticket } from './ticket.schema';
 
 export class CreateOrder {
   @IsEmail()
@@ -21,6 +22,15 @@ export class CreateOrder {
   @ValidateNested({ each: true })
   @Type(() => Ticket)
   tickets: Ticket[];
+}
+
+export class GetOrder {
+  @IsArray()
+  tickets: GetTicket[];
+  @IsEmail()
+  email: string;
+  @IsMobilePhone('ru-RU')
+  phone: string;
 }
 
 export class ResultOrder {
