@@ -33,7 +33,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/film-react-nest_backend:latest:latest
 
       - name: Build and push Front Docker image
         uses: docker/build-push-action@v3
@@ -41,4 +41,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/film-react-nest_frontend:latest
