@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { OrderService } from './order.service';
-import { CreateOrder } from './order.schema';
+import { OrderService } from '../repository/order.service';
+import { CreateOrder } from './dto/order.schema';
 
 @Controller('/order')
 export class OrderController {
@@ -8,11 +8,6 @@ export class OrderController {
 
   @Post()
   async create(@Body() createOrder: CreateOrder) {
-    const items = await this.orderService.processOrder(createOrder);
-
-    return {
-      total: items.length,
-      items,
-    };
+    return await this.orderService.processOrder(createOrder);
   }
 }

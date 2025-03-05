@@ -1,40 +1,70 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { Schedule, ScheduleSchema } from './schedule.schema';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { GetSchedule, Schedule } from './schedule.schema';
+import { IsFQDN, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export type FilmDocument = Film & Document;
 
-@Schema()
+@Entity('films')
 export class Film {
-  @Prop({ required: true })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Prop({ required: true })
+  @Column()
   title: string;
 
-  @Prop({ required: true })
+  @Column()
   director: string;
 
-  @Prop({ required: true })
+  @Column('float')
   rating: number;
 
-  @Prop({ required: true })
-  tags: string[];
+  @Column('simple-array')
+  tags: string;
 
-  @Prop({ required: true })
+  @Column()
   image: string;
 
-  @Prop({ required: true })
+  @Column()
   cover: string;
 
-  @Prop({ required: true })
+  @Column()
   about: string;
 
-  @Prop({ required: true })
+  @Column()
   description: string;
 
-  @Prop({ type: [ScheduleSchema], default: [] })
-  schedule: Schedule[];
+  @OneToMany(() => Schedule, (schedule) => schedule.film)
+  schedules: Schedule[];
 }
 
-export const FilmSchema = SchemaFactory.createForClass(Film);
+export class GetFilm {
+  id: string;
+  rating: number;
+  director: string;
+  tags: string;
+  image: string;
+  cover: string;
+  title: string;
+  about: string;
+  description: string;
+  schedules: GetSchedule[];
+}
+export class CreateFilm {
+  @IsNumber()
+  rating: number;
+  @IsString()
+  director: string;
+  tags: string;
+  @IsFQDN()
+  image: string;
+  @IsFQDN()
+  cover: string;
+  @IsString()
+  title: string;
+  @IsString()
+  about: string;
+  @IsString()
+  description: string;
+  @IsNotEmpty()
+  schedules: GetSchedule[];
+}

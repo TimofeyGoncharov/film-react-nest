@@ -1,14 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { AppConfig } from './app.config.provider';
 import 'dotenv/config';
+import { DevLogger } from './logger/dev.logger';
+import { JsonLogger } from './logger/json.logger';
+import { TSKVLogger } from './logger/tskv.logger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService: AppConfig = app.get('CONFIG');
-  const port = configService.port;
   app.setGlobalPrefix('api/afisha');
   app.enableCors();
-  await app.listen(port);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3000);
+  app.useLogger(
+    app.get('CONFIG').mode === 'dev'
+      ? new DevLogger()
+      : app.get('CONFIG').mode === 'prod' && app.get('CONFIG').logger === 'json'
+        ? new JsonLogger()
+        : new TSKVLogger(),
+  );
 }
 bootstrap();
