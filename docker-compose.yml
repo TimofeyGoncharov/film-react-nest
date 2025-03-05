@@ -6,8 +6,6 @@ services:
       - frontend:/app/dist
     networks:
       - webnetwork
-    depends_on:
-      - backend
     env_file:
       - frontend/.env
 
